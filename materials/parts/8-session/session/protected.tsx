@@ -3,21 +3,21 @@ import { ROUTES } from "../routes";
 import { useSession } from "./session";
 
 export const protectedLoader = async () => {
-  const token = await useSession.getState().getFreshToken();
-  if (!token) {
-    useSession.getState().logout();
-    return redirect(ROUTES.LOGIN);
-  }
+    const token = await useSession.getState().getFreshToken();
+    if (!token) {
+        useSession.getState().logout();
+        return redirect(ROUTES.LOGIN);
+    }
 
-  return null;
+    return null;
 };
 
 export function ProtectedRoute() {
-  const { session } = useSession();
+    const { session } = useSession();
 
-  if (!session) {
-    return <Navigate to={ROUTES.LOGIN} />;
-  }
+    if (!session) {
+        return <Navigate to={ROUTES.LOGIN} />;
+    }
 
-  return <Outlet />;
+    return <Outlet />;
 }

@@ -1,3 +1,3 @@
 export function BoardsListPage() {
-  return <div>Boards list</div>;
+	return <div>Boards list</div>
 }

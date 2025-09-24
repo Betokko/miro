@@ -1,7 +1,7 @@
 export function LoginPage() {
-  return <div>Login page</div>;
+	return <div>Login page</div>
 }
 
 export function RegisterPage() {
-  return <div>Register page</div>;
+	return <div>Register page</div>
 }
