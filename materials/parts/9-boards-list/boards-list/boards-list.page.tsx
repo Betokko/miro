@@ -1,40 +1,36 @@
-import { PlusIcon } from "lucide-react";
-import { useState } from "react";
-import {
-    TemplatesGallery,
-    TemplatesModal,
-    useTemplatesModal,
-} from "@/features/board-templates";
-import { useDebouncedValue } from "@/shared/lib/react";
-import { Button } from "@/shared/ui/kit/button";
-import { BoardCard } from "./compose/board-card";
-import { BoardItem } from "./compose/board-item";
-import { useBoardsFilters } from "./model/use-boards-filters";
-import { useBoardsList } from "./model/use-boards-list";
-import { useCreateBoard } from "./model/use-create-board";
+import { PlusIcon } from 'lucide-react'
+import { useState } from 'react'
+import { TemplatesGallery, TemplatesModal, useTemplatesModal } from '@/features/board-templates'
+import { useDebouncedValue } from '@/shared/lib/react'
+import { Button } from '@/shared/ui/kit/button'
+import { BoardCard } from './compose/board-card'
+import { BoardItem } from './compose/board-item'
+import { useBoardsFilters } from './model/use-boards-filters'
+import { useBoardsList } from './model/use-boards-list'
+import { useCreateBoard } from './model/use-create-board'
 import {
     BoardsListLayout,
     BoardsListLayoutContent,
     BoardsListLayoutFilters,
     BoardsListLayoutHeader,
-} from "./ui/boards-list-layout";
-import { BoardsSearchInput } from "./ui/boards-search-input";
-import { BoardsSidebar } from "./ui/boards-sidebar";
-import { BoardsSortSelect } from "./ui/boards-sort-select";
-import { type ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+} from './ui/boards-list-layout'
+import { BoardsSearchInput } from './ui/boards-search-input'
+import { BoardsSidebar } from './ui/boards-sidebar'
+import { BoardsSortSelect } from './ui/boards-sort-select'
+import { type ViewMode, ViewModeToggle } from './ui/view-mode-toggle'
 
 function BoardsListPage() {
-    const boardsFilters = useBoardsFilters();
+    const boardsFilters = useBoardsFilters()
     const boardsQuery = useBoardsList({
         sort: boardsFilters.sort,
         search: useDebouncedValue(boardsFilters.search, 300),
-    });
+    })
 
-    const templatesModal = useTemplatesModal();
+    const templatesModal = useTemplatesModal()
 
-    const createBoard = useCreateBoard();
+    const createBoard = useCreateBoard()
 
-    const [viewMode, setViewMode] = useState<ViewMode>("list");
+    const [viewMode, setViewMode] = useState<ViewMode>('list')
 
     return (
         <>
@@ -44,20 +40,14 @@ function BoardsListPage() {
                 sidebar={<BoardsSidebar />}
                 header={
                     <BoardsListLayoutHeader
-                        title="Доски"
-                        description="Здесь вы можете просматривать и управлять своими досками"
+                        title='Доски'
+                        description='Здесь вы можете просматривать и управлять своими досками'
                         actions={
                             <>
-                                <Button
-                                    variant="outline"
-                                    onClick={() => templatesModal.open()}
-                                >
+                                <Button variant='outline' onClick={() => templatesModal.open()}>
                                     Выбрать шаблон
                                 </Button>
-                                <Button
-                                    disabled={createBoard.isPending}
-                                    onClick={createBoard.createBoard}
-                                >
+                                <Button disabled={createBoard.isPending} onClick={createBoard.createBoard}>
                                     <PlusIcon />
                                     Создать доску
                                 </Button>
@@ -67,24 +57,9 @@ function BoardsListPage() {
                 }
                 filters={
                     <BoardsListLayoutFilters
-                        sort={
-                            <BoardsSortSelect
-                                value={boardsFilters.sort}
-                                onValueChange={boardsFilters.setSort}
-                            />
-                        }
-                        filters={
-                            <BoardsSearchInput
-                                value={boardsFilters.search}
-                                onChange={boardsFilters.setSearch}
-                            />
-                        }
-                        actions={
-                            <ViewModeToggle
-                                value={viewMode}
-                                onChange={(value) => setViewMode(value)}
-                            />
-                        }
+                        sort={<BoardsSortSelect value={boardsFilters.sort} onValueChange={boardsFilters.setSort} />}
+                        filters={<BoardsSearchInput value={boardsFilters.search} onChange={boardsFilters.setSearch} />}
+                        actions={<ViewModeToggle value={viewMode} onChange={(value) => setViewMode(value)} />}
                     />
                 }
             >
@@ -95,20 +70,12 @@ function BoardsListPage() {
                     cursorRef={boardsQuery.cursorRef}
                     hasCursor={boardsQuery.hasNextPage}
                     mode={viewMode}
-                    renderList={() =>
-                        boardsQuery.boards.map((board) => (
-                            <BoardItem key={board.id} board={board} />
-                        ))
-                    }
-                    renderGrid={() =>
-                        boardsQuery.boards.map((board) => (
-                            <BoardCard key={board.id} board={board} />
-                        ))
-                    }
+                    renderList={() => boardsQuery.boards.map((board) => <BoardItem key={board.id} board={board} />)}
+                    renderGrid={() => boardsQuery.boards.map((board) => <BoardCard key={board.id} board={board} />)}
                 />
             </BoardsListLayout>
         </>
-    );
+    )
 }
 
-export const Component = BoardsListPage;
+export const Component = BoardsListPage

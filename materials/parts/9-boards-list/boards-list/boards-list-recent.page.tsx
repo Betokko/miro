@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { BoardCard } from "./compose/board-card";
-import { BoardItem } from "./compose/board-item";
-import { useBoardsList } from "./model/use-boards-list";
+import { useState } from 'react'
+import { BoardCard } from './compose/board-card'
+import { BoardItem } from './compose/board-item'
+import { useBoardsList } from './model/use-boards-list'
 
-import { useRecentGroups } from "./model/use-recent-groups";
+import { useRecentGroups } from './model/use-recent-groups'
 import {
     BoardsLayoutContentGroups,
     BoardsListLayout,
@@ -11,32 +11,27 @@ import {
     BoardsListLayoutContent,
     BoardsListLayoutHeader,
     BoardsListLayoutList,
-} from "./ui/boards-list-layout";
-import { BoardsSidebar } from "./ui/boards-sidebar";
-import { type ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+} from './ui/boards-list-layout'
+import { BoardsSidebar } from './ui/boards-sidebar'
+import { type ViewMode, ViewModeToggle } from './ui/view-mode-toggle'
 
 function BoardsListPage() {
     const boardsQuery = useBoardsList({
-        sort: "lastOpenedAt",
-    });
+        sort: 'lastOpenedAt',
+    })
 
-    const [viewMode, setViewMode] = useState<ViewMode>("list");
+    const [viewMode, setViewMode] = useState<ViewMode>('list')
 
-    const recentGroups = useRecentGroups(boardsQuery.boards);
+    const recentGroups = useRecentGroups(boardsQuery.boards)
 
     return (
         <BoardsListLayout
             sidebar={<BoardsSidebar />}
             header={
                 <BoardsListLayoutHeader
-                    title="Последние доски"
-                    description="Здесь вы можете просматривать и управлять своими последними досками"
-                    actions={
-                        <ViewModeToggle
-                            value={viewMode}
-                            onChange={(value) => setViewMode(value)}
-                        />
-                    }
+                    title='Последние доски'
+                    description='Здесь вы можете просматривать и управлять своими последними досками'
+                    actions={<ViewModeToggle value={viewMode} onChange={(value) => setViewMode(value)} />}
                 />
             }
         >
@@ -71,7 +66,7 @@ function BoardsListPage() {
                 />
             </BoardsListLayoutContent>
         </BoardsListLayout>
-    );
+    )
 }
 
-export const Component = BoardsListPage;
+export const Component = BoardsListPage

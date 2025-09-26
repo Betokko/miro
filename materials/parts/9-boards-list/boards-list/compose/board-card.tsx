@@ -1,13 +1,13 @@
-import type { ApiSchemas } from "@/shared/api/schema";
-import { Button } from "@/shared/ui/kit/button";
-import { useDeleteBoard } from "../model/use-delete-board";
-import { useUpdateFavorite } from "../model/use-update-favorite";
-import { BoardsFavoriteToggle } from "../ui/boards-favorite-toggle";
-import { BoardsListCard } from "../ui/boards-list-card";
+import type { ApiSchemas } from '@/shared/api/schema'
+import { Button } from '@/shared/ui/kit/button'
+import { useDeleteBoard } from '../model/use-delete-board'
+import { useUpdateFavorite } from '../model/use-update-favorite'
+import { BoardsFavoriteToggle } from '../ui/boards-favorite-toggle'
+import { BoardsListCard } from '../ui/boards-list-card'
 
-export function BoardCard({ board }: { board: ApiSchemas["Board"] }) {
-    const deleteBoard = useDeleteBoard();
-    const updateFavorite = useUpdateFavorite();
+export function BoardCard({ board }: { board: ApiSchemas['Board'] }) {
+    const deleteBoard = useDeleteBoard()
+    const updateFavorite = useUpdateFavorite()
 
     return (
         <BoardsListCard
@@ -21,7 +21,7 @@ export function BoardCard({ board }: { board: ApiSchemas["Board"] }) {
             }
             bottomActions={
                 <Button
-                    variant="destructive"
+                    variant='destructive'
                     disabled={deleteBoard.getIsPending(board.id)}
                     onClick={() => deleteBoard.deleteBoard(board.id)}
                 >
@@ -29,5 +29,5 @@ export function BoardCard({ board }: { board: ApiSchemas["Board"] }) {
                 </Button>
             }
         />
-    );
+    )
 }

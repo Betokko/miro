@@ -1,11 +1,15 @@
-import { BoardPage } from "@/features/board"
-import { AppHeader } from "@/features/header"
+import { Outlet, useLocation } from 'react-router-dom'
+import { AppHeader } from '@/features/header'
+import { ROUTES } from '@/shared/model/routes.tsx'
 
 export function App() {
+    const location = useLocation()
+    const isAuthPage = location.pathname === ROUTES.LOGIN || location.pathname === ROUTES.REGISTER
+
     return (
-        <div className='App'>
-            <BoardPage />
-            <AppHeader />
+        <div className={'bg-gray-100'}>
+            {!isAuthPage && <AppHeader />}
+            <Outlet />
         </div>
     )
 }

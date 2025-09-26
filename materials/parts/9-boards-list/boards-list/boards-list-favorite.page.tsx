@@ -1,35 +1,26 @@
-import { useState } from "react";
-import { BoardCard } from "./compose/board-card";
-import { BoardItem } from "./compose/board-item";
-import { useBoardsList } from "./model/use-boards-list";
-import {
-    BoardsListLayout,
-    BoardsListLayoutContent,
-    BoardsListLayoutHeader,
-} from "./ui/boards-list-layout";
-import { BoardsSidebar } from "./ui/boards-sidebar";
-import { type ViewMode, ViewModeToggle } from "./ui/view-mode-toggle";
+import { useState } from 'react'
+import { BoardCard } from './compose/board-card'
+import { BoardItem } from './compose/board-item'
+import { useBoardsList } from './model/use-boards-list'
+import { BoardsListLayout, BoardsListLayoutContent, BoardsListLayoutHeader } from './ui/boards-list-layout'
+import { BoardsSidebar } from './ui/boards-sidebar'
+import { type ViewMode, ViewModeToggle } from './ui/view-mode-toggle'
 
 function BoardsListPage() {
     const boardsQuery = useBoardsList({
         isFavorite: true,
-    });
+    })
 
-    const [viewMode, setViewMode] = useState<ViewMode>("list");
+    const [viewMode, setViewMode] = useState<ViewMode>('list')
 
     return (
         <BoardsListLayout
             sidebar={<BoardsSidebar />}
             header={
                 <BoardsListLayoutHeader
-                    title="Избранные доски"
-                    description="Здесь вы можете просматривать и управлять своими избранными досками"
-                    actions={
-                        <ViewModeToggle
-                            value={viewMode}
-                            onChange={(value) => setViewMode(value)}
-                        />
-                    }
+                    title='Избранные доски'
+                    description='Здесь вы можете просматривать и управлять своими избранными досками'
+                    actions={<ViewModeToggle value={viewMode} onChange={(value) => setViewMode(value)} />}
                 />
             }
         >
@@ -40,19 +31,11 @@ function BoardsListPage() {
                 cursorRef={boardsQuery.cursorRef}
                 hasCursor={boardsQuery.hasNextPage}
                 mode={viewMode}
-                renderList={() =>
-                    boardsQuery.boards.map((board) => (
-                        <BoardItem board={board} />
-                    ))
-                }
-                renderGrid={() =>
-                    boardsQuery.boards.map((board) => (
-                        <BoardCard board={board} />
-                    ))
-                }
+                renderList={() => boardsQuery.boards.map((board) => <BoardItem board={board} />)}
+                renderGrid={() => boardsQuery.boards.map((board) => <BoardCard board={board} />)}
             />
         </BoardsListLayout>
-    );
+    )
 }
 
-export const Component = BoardsListPage;
+export const Component = BoardsListPage
