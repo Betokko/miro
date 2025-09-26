@@ -375,7 +375,7 @@ fetchClient.use({
 
 **6 Подключаем модуль сессии в приложение**
 
-- Переносим `enableMocking` в `src/shared/api/mocks/index.ts`
+- Переносим `enableMocking` в `src/shared/api/mocks/boards.ts`
 
 Добавляем использование сессии в формах входа и регистрации
 

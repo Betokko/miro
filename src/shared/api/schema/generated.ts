@@ -4,146 +4,258 @@
  */
 
 export interface paths {
-    '/boards': {
+    "/auth/login": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Login user */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["LoginRequest"];
+                };
+            };
+            responses: {
+                /** @description Login successful */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AuthResponse"];
+                    };
+                };
+                401: components["responses"]["UnauthorizedError"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/auth/register": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Register new user */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["RegisterRequest"];
+                };
+            };
+            responses: {
+                /** @description Registration successful */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["AuthResponse"];
+                    };
+                };
+                400: components["responses"]["BadRequestError"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boards": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
         /** Get all boards for current user */
         get: {
             parameters: {
-                query?: never
-                header?: never
-                path?: never
-                cookie?: never
-            }
-            requestBody?: never
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
             responses: {
                 /** @description List of boards */
                 200: {
                     headers: {
-                        [name: string]: unknown
-                    }
+                        [name: string]: unknown;
+                    };
                     content: {
-                        'application/json': components['schemas']['Board'][]
-                    }
-                }
-                401: components['responses']['UnauthorizedError']
-            }
-        }
-        put?: never
+                        "application/json": components["schemas"]["Board"][];
+                    };
+                };
+                401: components["responses"]["UnauthorizedError"];
+            };
+        };
+        put?: never;
         /** Create a new board */
         post: {
             parameters: {
-                query?: never
-                header?: never
-                path?: never
-                cookie?: never
-            }
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
             requestBody: {
                 content: {
-                    'application/json': components['schemas']['CreateBoard']
-                }
-            }
+                    "application/json": components["schemas"]["CreateBoard"];
+                };
+            };
             responses: {
                 /** @description Board created successfully */
                 201: {
                     headers: {
-                        [name: string]: unknown
-                    }
+                        [name: string]: unknown;
+                    };
                     content: {
-                        'application/json': components['schemas']['Board']
-                    }
-                }
-                401: components['responses']['UnauthorizedError']
-            }
-        }
-        delete?: never
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
-    '/boards/{boardId}': {
+                        "application/json": components["schemas"]["Board"];
+                    };
+                };
+                401: components["responses"]["UnauthorizedError"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/boards/{boardId}": {
         parameters: {
-            query?: never
-            header?: never
-            path?: never
-            cookie?: never
-        }
-        get?: never
-        put?: never
-        post?: never
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
         /** Delete a board */
         delete: {
             parameters: {
-                query?: never
-                header?: never
+                query?: never;
+                header?: never;
                 path: {
-                    boardId: string
-                }
-                cookie?: never
-            }
-            requestBody?: never
+                    boardId: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
             responses: {
                 /** @description Board deleted successfully */
                 204: {
                     headers: {
-                        [name: string]: unknown
-                    }
-                    content?: never
-                }
-                401: components['responses']['UnauthorizedError']
-                404: components['responses']['NotFoundError']
-            }
-        }
-        options?: never
-        head?: never
-        patch?: never
-        trace?: never
-    }
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                401: components["responses"]["UnauthorizedError"];
+                404: components["responses"]["NotFoundError"];
+            };
+        };
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
-export type webhooks = Record<string, never>
+export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        Board: {
-            id: string
-            name: string
-        }
+        LoginRequest: {
+            /** Format: email */
+            email: string;
+            /** Format: password */
+            password: string;
+        };
+        User: {
+            id: string;
+            /** Format: email */
+            email: string;
+        };
+        AuthResponse: {
+            accessToken: string;
+            user: components["schemas"]["User"];
+        };
         Error: {
-            message: string
-            code: string
-        }
+            message: string;
+            code: string;
+        };
+        RegisterRequest: {
+            /** Format: email */
+            email: string;
+            /** Format: password */
+            password: string;
+        };
+        Board: {
+            id: string;
+            name: string;
+        };
         CreateBoard: {
-            name: string
-        }
-    }
+            name: string;
+        };
+    };
     responses: {
         /** @description Unauthorized */
         UnauthorizedError: {
             headers: {
-                [name: string]: unknown
-            }
+                [name: string]: unknown;
+            };
             content: {
-                'application/json': components['schemas']['Error']
-            }
-        }
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+        /** @description Bad request */
+        BadRequestError: {
+            headers: {
+                [name: string]: unknown;
+            };
+            content: {
+                "application/json": components["schemas"]["Error"];
+            };
+        };
         /** @description Resource not found */
         NotFoundError: {
             headers: {
-                [name: string]: unknown
-            }
+                [name: string]: unknown;
+            };
             content: {
-                'application/json': components['schemas']['Error']
-            }
-        }
-    }
-    parameters: never
-    requestBodies: never
-    headers: never
-    pathItems: never
+                "application/json": components["schemas"]["Error"];
+            };
+        };
+    };
+    parameters: never;
+    requestBodies: never;
+    headers: never;
+    pathItems: never;
 }
-export type $defs = Record<string, never>
-export type operations = Record<string, never>
+export type $defs = Record<string, never>;
+export type operations = Record<string, never>;

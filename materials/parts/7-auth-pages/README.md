@@ -37,7 +37,7 @@ npm run api
 
 Регистрируем
 
-`src/shared/api/mocks/handlers/index.ts`
+`src/shared/api/mocks/handlers/boards.ts`
 
 ```ts
 import { authHandlers } from './auth'
