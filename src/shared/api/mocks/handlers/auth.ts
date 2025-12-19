@@ -1,4 +1,5 @@
 import { delay, HttpResponse } from 'msw'
+import { createRefreshTokenCookie, generateTokens, verifyToken } from '@/shared/api/mocks/session.ts'
 import type { ApiSchemas } from '../../schema'
 import { http } from '../http'
 
@@ -9,7 +10,6 @@ const mockUsers: ApiSchemas['User'][] = [
     },
 ]
 const userPasswords = new Map<string, string>().set('admin@gmail.com', '123456')
-const mockTokens = new Map<string, string>()
 
 export const authHandlers = [
     http.post('/auth/login', async ({ request }) => {
@@ -30,13 +30,18 @@ export const authHandlers = [
             )
         }
 
-        const token = `mock-token-${Date.now()}`
+        const { accessToken, refreshToken } = await generateTokens({ userId: user.id, email: user.email })
         return HttpResponse.json(
             {
-                accessToken: token,
+                accessToken,
                 user,
             },
-            { status: 200 },
+            {
+                status: 200,
+                headers: {
+                    'Set-Cookie': createRefreshTokenCookie(refreshToken),
+                },
+            },
         )
     }),
 
@@ -60,17 +65,73 @@ export const authHandlers = [
             email: body.email,
         }
 
-        const token = `mock-token-${Date.now()}`
+        const { accessToken, refreshToken } = await generateTokens({ userId: newUser.id, email: newUser.email })
         mockUsers.push(newUser)
         userPasswords.set(body.email, body.password)
-        mockTokens.set(body.email, token)
 
         return HttpResponse.json(
             {
-                accessToken: token,
+                accessToken,
                 user: newUser,
             },
-            { status: 201 },
+            {
+                status: 201,
+                headers: {
+                    'Set-Cookie': createRefreshTokenCookie(refreshToken),
+                },
+            },
         )
+    }),
+
+    http.post('/auth/refresh', async ({ cookies }) => {
+        const refreshToken = cookies.refreshToken
+
+        if (!refreshToken) {
+            return HttpResponse.json(
+                {
+                    message: 'Refresh token не найден',
+                    code: 'REFRESH_TOKEN_MISSING',
+                },
+                { status: 401 },
+            )
+        }
+
+        try {
+            const session = await verifyToken(refreshToken)
+            const user = mockUsers.find((u) => u.id === session.userId)
+
+            if (!user) {
+                throw new Error('User not found')
+            }
+
+            await delay(1000)
+
+            const { accessToken, refreshToken: newRefreshToken } = await generateTokens({
+                userId: user.id,
+                email: user.email,
+            })
+
+            return HttpResponse.json(
+                {
+                    accessToken,
+                    user,
+                },
+                {
+                    status: 200,
+                    headers: {
+                        'Set-Cookie': createRefreshTokenCookie(newRefreshToken),
+                    },
+                },
+            )
+        } catch (error) {
+            console.error('Error refreshing token:', error)
+            return HttpResponse.json(
+                {
+                    message: 'Недействительный refresh token',
+                    code: 'INVALID_REFRESH_TOKEN',
+                },
+                { status: 401 },
+            )
+        }
     }),
 ]

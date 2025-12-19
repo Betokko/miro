@@ -1,25 +1,31 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { useLogin } from '@/features/auth/use-login.ts'
+import { useRegister } from '@/features/auth/model/use-register.ts'
 import { Button } from '@/shared/ui/kit/button.tsx'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/kit/form'
 import { Input } from '@/shared/ui/kit/input'
 
-const loginSchema = z.object({
-    email: z.email('Введите корректный email'),
-    password: z.string().min(1, 'Введите пароль').min(6, 'Пароль не может быть короче 6 символов'),
-})
+const registerSchema = z
+    .object({
+        email: z.email('Введите корректный email'),
+        password: z.string().min(1, 'Введите пароль').min(6, 'Пароль не может быть короче 6 символов'),
+        confirmPassword: z.string().optional(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        path: ['confirmPassword'],
+        message: 'Пароли не совпадают',
+    })
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
     const form = useForm({
-        resolver: zodResolver(loginSchema),
+        resolver: zodResolver(registerSchema),
         defaultValues: { email: '', password: '' },
     })
 
-    const { login, isPending, errorMessage } = useLogin()
+    const { register, isPending, errorMessage } = useRegister()
 
-    const handleSubmit = form.handleSubmit(login)
+    const handleSubmit = form.handleSubmit(register)
 
     return (
         <Form {...form}>
@@ -29,7 +35,7 @@ export const LoginForm = () => {
                     name='email'
                     render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Email</FormLabel>
+                            <FormLabel>Логин</FormLabel>
                             <FormControl>
                                 <Input placeholder='email@mail.com' {...field} />
                             </FormControl>
@@ -50,9 +56,22 @@ export const LoginForm = () => {
                         </FormItem>
                     )}
                 />
+                <FormField
+                    control={form.control}
+                    name='confirmPassword'
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Подтвердите пароль</FormLabel>
+                            <FormControl>
+                                <Input type='password' {...field} />
+                            </FormControl>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
                 {errorMessage && <p className='text-destructive text-sm'>{errorMessage}</p>}
                 <Button disabled={isPending} type='submit'>
-                    Войти
+                    Зарегистрироваться
                 </Button>
             </form>
         </Form>

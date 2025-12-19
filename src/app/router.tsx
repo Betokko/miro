@@ -1,18 +1,36 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
+import { ProtectedRoute, protectedLoader } from '@/app/protected-route.tsx'
+import { Providers } from '@/app/providers.tsx'
+import { AppHeader } from '@/features/header'
 import { ROUTES } from '../shared/model/routes.tsx'
 import { App } from './app.tsx'
 
 export const router = createBrowserRouter([
     {
-        element: <App />,
+        element: (
+            <Providers>
+                <App />
+            </Providers>
+        ),
         children: [
             {
-                path: ROUTES.BOARDS,
-                lazy: () => import('@/features/boards-list/boards-list.page.tsx'),
-            },
-            {
-                path: ROUTES.BOARD,
-                lazy: () => import('@/features/board/board.page.tsx'),
+                loader: protectedLoader,
+                element: (
+                    <>
+                        <AppHeader />
+                        <ProtectedRoute />
+                    </>
+                ),
+                children: [
+                    {
+                        path: ROUTES.BOARDS,
+                        lazy: () => import('@/features/boards-list/boards-list.page.tsx'),
+                    },
+                    {
+                        path: ROUTES.BOARD,
+                        lazy: () => import('@/features/board/board.page.tsx'),
+                    },
+                ],
             },
             {
                 path: ROUTES.LOGIN,

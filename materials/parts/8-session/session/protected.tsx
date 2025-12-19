@@ -1,5 +1,5 @@
 import { Navigate, Outlet, redirect } from 'react-router-dom'
-import { ROUTES } from '../routes'
+import { ROUTES } from '@/shared/model/routes'
 import { useSession } from './session'
 
 export const protectedLoader = async () => {

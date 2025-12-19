@@ -9,9 +9,11 @@ import { Card, CardFooter, CardHeader } from '@/shared/ui/kit/card'
 function BoardsListPage() {
     const queryClient = useQueryClient()
     const boardsQuery = rqClient.useQuery('get', '/boards')
+
     const createBoardMutation = rqClient.useMutation('post', '/boards', {
         onSettled: async () => await queryClient.invalidateQueries(rqClient.queryOptions('get', '/boards')),
     })
+
     const deleteBoardMutation = rqClient.useMutation('delete', '/boards/{boardId}', {
         onSettled: async () => await queryClient.invalidateQueries(rqClient.queryOptions('get', '/boards')),
     })
@@ -27,7 +29,7 @@ function BoardsListPage() {
                     createBoardMutation.mutate({ body: { name: formData.get('name') as string } })
                 }}
             >
-                <input autoFocus name='name' />
+                <input name='name' />
                 <Button type='submit' disabled={createBoardMutation.isPending}>
                     Create Board
                 </Button>

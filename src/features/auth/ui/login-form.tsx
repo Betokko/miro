@@ -1,36 +1,33 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Button } from '@/shared/ui/kit/button'
+import { useLogin } from '@/features/auth/model/use-login.ts'
+import { Button } from '@/shared/ui/kit/button.tsx'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/shared/ui/kit/form'
 import { Input } from '@/shared/ui/kit/input'
-import { useLogin } from '../model/use-login'
 
 const loginSchema = z.object({
-    email: z
-        .string({
-            required_error: 'Email обязателен',
-        })
-        .email('Неверный email'),
-    password: z
-        .string({
-            required_error: 'Пароль обязателен',
-        })
-        .min(6, 'Пароль должен быть не менее 6 символов'),
+    email: z.email('Введите корректный email'),
+    password: z.string().min(1, 'Введите пароль').min(6, 'Пароль не может быть короче 6 символов'),
 })
 
-export function LoginForm() {
+export const LoginForm = () => {
     const form = useForm({
         resolver: zodResolver(loginSchema),
+        defaultValues: { email: '', password: '' },
     })
 
-    const { errorMessage, isPending, login } = useLogin()
+    const { login, isPending, errorMessage } = useLogin()
 
-    const onSubmit = form.handleSubmit(login)
+    const handleSubmit = form.handleSubmit(login)
+
+    const autoLogin = () => {
+        login({ email: 'admin@gmail.com', password: '123456' })
+    }
 
     return (
         <Form {...form}>
-            <form className='flex flex-col gap-4' onSubmit={onSubmit}>
+            <form className='flex flex-col gap-4' onSubmit={handleSubmit}>
                 <FormField
                     control={form.control}
                     name='email'
@@ -38,9 +35,8 @@ export function LoginForm() {
                         <FormItem>
                             <FormLabel>Email</FormLabel>
                             <FormControl>
-                                <Input placeholder='admin@gmail.com' {...field} />
+                                <Input placeholder='email@mail.com' {...field} />
                             </FormControl>
-
                             <FormMessage />
                         </FormItem>
                     )}
@@ -52,20 +48,20 @@ export function LoginForm() {
                         <FormItem>
                             <FormLabel>Пароль</FormLabel>
                             <FormControl>
-                                <Input placeholder='******' type='password' {...field} />
+                                <Input type='password' placeholder='******' {...field} />
                             </FormControl>
-
                             <FormMessage />
                         </FormItem>
                     )}
                 />
-
                 {errorMessage && <p className='text-destructive text-sm'>{errorMessage}</p>}
-
                 <Button disabled={isPending} type='submit'>
                     Войти
                 </Button>
             </form>
+            <Button className='mt-4 w-full' type='submit' variant='ghost' onClick={autoLogin}>
+                Войти без регистрации
+            </Button>
         </Form>
     )
 }

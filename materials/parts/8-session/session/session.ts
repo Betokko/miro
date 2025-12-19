@@ -1,5 +1,5 @@
 import { createGStore } from 'create-gstore'
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 
 import { useMemo, useState } from 'react'
 import { fetchClient } from '@/shared/api/instance'
