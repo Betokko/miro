@@ -2,16 +2,13 @@ import { delay, HttpResponse } from 'msw'
 import type { ApiSchemas } from '../../schema'
 import { http } from '../http'
 
-const userPasswords = new Map<string, string>()
 const mockUsers: ApiSchemas['User'][] = [
     {
         id: '1',
         email: 'admin@gmail.com',
     },
 ]
-
-userPasswords.set('admin@gmail.com', '123456')
-
+const userPasswords = new Map<string, string>().set('admin@gmail.com', '123456')
 const mockTokens = new Map<string, string>()
 
 export const authHandlers = [

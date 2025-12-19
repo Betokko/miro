@@ -8,11 +8,8 @@ import { Input } from '@/shared/ui/kit/input'
 
 const registerSchema = z
     .object({
-        email: z.string().min(1, 'Поле email обязательно для заполнения').email('Некорректный email'),
-        password: z
-            .string()
-            .min(1, 'Поле password обязательно для заполнения')
-            .min(6, 'Поле password не может быть короче 6 символов'),
+        email: z.email('Введите корректный email'),
+        password: z.string().min(1, 'Введите пароль').min(6, 'Пароль не может быть короче 6 символов'),
         confirmPassword: z.string().optional(),
     })
     .refine((data) => data.password === data.confirmPassword, {
@@ -23,6 +20,7 @@ const registerSchema = z
 export const RegisterForm = () => {
     const form = useForm({
         resolver: zodResolver(registerSchema),
+        defaultValues: { email: '', password: '' },
     })
 
     const { register, isPending, errorMessage } = useRegister()
@@ -52,7 +50,7 @@ export const RegisterForm = () => {
                         <FormItem>
                             <FormLabel>Пароль</FormLabel>
                             <FormControl>
-                                <Input type='password' placeholder='****' {...field} />
+                                <Input type='password' placeholder='******' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

@@ -7,13 +7,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '
 import { Input } from '@/shared/ui/kit/input'
 
 const loginSchema = z.object({
-    email: z.string().min(1, 'Поле email обязательно для заполнения').email('Некорректный email'),
-    password: z.string().min(1, 'Пароль обязателен для заполнения').min(6, 'Пароль не может быть короче 6 символов'),
+    email: z.email('Введите корректный email'),
+    password: z.string().min(1, 'Введите пароль').min(6, 'Пароль не может быть короче 6 символов'),
 })
 
 export const LoginForm = () => {
     const form = useForm({
         resolver: zodResolver(loginSchema),
+        defaultValues: { email: '', password: '' },
     })
 
     const { login, isPending, errorMessage } = useLogin()
@@ -43,7 +44,7 @@ export const LoginForm = () => {
                         <FormItem>
                             <FormLabel>Пароль</FormLabel>
                             <FormControl>
-                                <Input type='password' placeholder='****' {...field} />
+                                <Input type='password' placeholder='******' {...field} />
                             </FormControl>
                             <FormMessage />
                         </FormItem>

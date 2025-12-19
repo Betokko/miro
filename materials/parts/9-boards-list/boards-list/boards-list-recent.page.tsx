@@ -48,15 +48,15 @@ function BoardsListPage() {
                         items: {
                             list: (
                                 <BoardsListLayoutList>
-                                    {group.items.map((board) => (
-                                        <BoardItem board={board} />
+                                    {group.items.map((board, i) => (
+                                        <BoardItem board={board} key={i} />
                                     ))}
                                 </BoardsListLayoutList>
                             ),
                             cards: (
                                 <BoardsListLayoutCards>
-                                    {group.items.map((board) => (
-                                        <BoardCard board={board} />
+                                    {group.items.map((board, i) => (
+                                        <BoardCard board={board} key={i} />
                                     ))}
                                 </BoardsListLayoutCards>
                             ),

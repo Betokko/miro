@@ -39,12 +39,21 @@
     "linter": {
         "enabled": true,
         "rules": {
+            "a11y": "off",
             "recommended": true,
             "style": {
                 "noNonNullAssertion": "off"
             },
             "suspicious": {
-                "noUnknownAtRules": "off"
+                "noUnknownAtRules": "off",
+                "noArrayIndexKey": "info"
+            },
+            "correctness": {
+                "useUniqueElementIds": "info",
+                "useExhaustiveDependencies": "info"
+            },
+            "complexity": {
+                "useOptionalChain": "info"
             }
         }
     }

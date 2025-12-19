@@ -6,10 +6,11 @@
     "scripts": {
         "dev": "vite",
         "build": "tsc -b && vite build",
-        "lint": "eslint .",
-        "preview": "vite preview",
+        "lint": "biome lint",
         "format": "biome format --write",
-        "api": "npx openapi-typescript ./src/shared/api/schema/main.yaml -o ./src/shared/api/schema/generated.ts"
+        "preview": "vite preview",
+        "api": "npx openapi-typescript ./src/shared/api/schema/main.yaml -o ./src/shared/api/schema/generated.ts",
+        "redocly": "npx @redocly/cli@latest bundle ./src/shared/api/schema/main.yaml -o bundle.yaml"
     },
     "dependencies": {
         "@hookform/resolvers": "^5.2.2",

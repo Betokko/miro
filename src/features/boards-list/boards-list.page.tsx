@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { generatePath, Link } from 'react-router-dom'
 import { rqClient } from '@/shared/api/instance.ts'
+import { CONFIG } from '@/shared/model/config.ts'
 import { ROUTES } from '@/shared/model/routes.tsx'
 import { Button } from '@/shared/ui/kit/button.tsx'
 import { Card, CardFooter, CardHeader } from '@/shared/ui/kit/card'
@@ -17,7 +18,7 @@ function BoardsListPage() {
 
     return (
         <div className={'container mx-auto p-4'}>
-            <h1>Boards list</h1>
+            <h1>Boards list {CONFIG.API_BASE_URL}</h1>
 
             <form
                 onSubmit={(e) => {
@@ -26,7 +27,7 @@ function BoardsListPage() {
                     createBoardMutation.mutate({ body: { name: formData.get('name') as string } })
                 }}
             >
-                <input name='name' />
+                <input autoFocus name='name' />
                 <Button type='submit' disabled={createBoardMutation.isPending}>
                     Create Board
                 </Button>

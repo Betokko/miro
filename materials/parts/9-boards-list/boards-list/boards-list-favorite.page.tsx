@@ -31,8 +31,8 @@ function BoardsListPage() {
                 cursorRef={boardsQuery.cursorRef}
                 hasCursor={boardsQuery.hasNextPage}
                 mode={viewMode}
-                renderList={() => boardsQuery.boards.map((board) => <BoardItem board={board} />)}
-                renderGrid={() => boardsQuery.boards.map((board) => <BoardCard board={board} />)}
+                renderList={() => boardsQuery.boards.map((board, i) => <BoardItem board={board} key={i} />)}
+                renderGrid={() => boardsQuery.boards.map((board, i) => <BoardCard board={board} key={i} />)}
             />
         </BoardsListLayout>
     )
