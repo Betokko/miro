@@ -185,6 +185,7 @@ export const boardsHandlers = [
         await verifyTokenOrThrow(request)
         const { boardId } = params
         const board = boards.find((board) => board.id === boardId)
+        await delay(1000)
 
         if (!board) {
             return HttpResponse.json({ message: 'Board not found', code: 'NOT_FOUND' }, { status: 404 })

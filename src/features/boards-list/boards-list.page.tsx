@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { StarIcon, StarOffIcon } from 'lucide-react'
 import { href, Link } from 'react-router-dom'
-import { rqClient } from '@/shared/api/instance'
-import type { ApiSchemas } from '@/shared/api/schema'
+import { useDebouncedValue } from '@/shared/lib/react'
 import { CONFIG } from '@/shared/model/config'
 import { ROUTES } from '@/shared/model/routes'
 import { Button } from '@/shared/ui/kit/button'
@@ -11,85 +11,23 @@ import { Label } from '@/shared/ui/kit/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/shared/ui/kit/select'
 import { Switch } from '@/shared/ui/kit/switch'
 import { Tabs, TabsList, TabsTrigger } from '@/shared/ui/kit/tabs'
-import { useBoardsList } from './use-boards-list'
 import { useBoardsFilters } from './use-boards-filters'
-import { useDebouncedValue } from '@/shared/lib/react'
+import { useBoardsList } from './use-boards-list'
 import { useCreateBoard } from './use-create-board'
 import { useDeleteBoard } from './use-delete-board'
+import { useUpdateFavorite } from './use-update-favorite'
 
 type BoardsSortOption = 'createdAt' | 'updatedAt' | 'lastOpenedAt' | 'name'
 
 function BoardsListPage() {
-    const queryClient = useQueryClient()
-
     const boardFilters = useBoardsFilters()
     const boardsQuery = useBoardsList({
         sort: boardFilters.sort,
         search: useDebouncedValue(boardFilters.search),
     })
-
     const createBoard = useCreateBoard()
     const deleteBoard = useDeleteBoard()
-
-    // const boardsQuery = rqClient.useQuery('get', '/boards', {
-    //     params: {
-    //         query: {
-    //             page,
-    //             limit: 20,
-    //             sort,
-    //             search: debouncedSearch || undefined,
-    //             isFavorite: showFavorites,
-    //         },
-    //     },
-    //     enabled: true,
-    // })
-
-    // Обновляем список досок при получении новых данных
-    // useEffect(() => {
-    //     if (boardsQuery.data?.list) {
-    //         if (page === 1) {
-    //             setBoards(boardsQuery.data.list)
-    //         } else {
-    //             setBoards((prev) => [...prev, ...boardsQuery.data.list])
-    //         }
-    //         setHasMore(page < (boardsQuery.data.totalPages || 1))
-    //         setIsLoadingMore(false)
-    //     }
-    // }, [boardsQuery.data, page])
-
-    // // Функция для загрузки следующей страницы
-    // const loadMore = useCallback(() => {
-    //     if (!isLoadingMore && hasMore && !boardsQuery.isPending) {
-    //         setIsLoadingMore(true)
-    //         setPage((prevPage) => prevPage + 1)
-    //     }
-    // }, [isLoadingMore, hasMore, boardsQuery.isPending])
-
-    const createBoardMutation = rqClient.useMutation('post', '/boards', {
-        onSettled: async () => {
-            await queryClient.invalidateQueries(rqClient.queryOptions('get', '/boards'))
-            setPage(1)
-        },
-    })
-
-    const deleteBoardMutation = rqClient.useMutation('delete', '/boards/{boardId}', {
-        onSettled: async () => {
-            await queryClient.invalidateQueries(rqClient.queryOptions('get', '/boards'))
-        },
-    })
-
-    const toggleFavoriteMutation = rqClient.useMutation('put', '/boards/{boardId}/favorite', {
-        onSettled: async () => {
-            await queryClient.invalidateQueries(rqClient.queryOptions('get', '/boards'))
-        },
-    })
-
-    const handleToggleFavorite = (board: ApiSchemas['Board']) => {
-        toggleFavoriteMutation.mutate({
-            params: { path: { boardId: board.id } },
-            body: { isFavorite: !board.isFavorite },
-        })
-    }
+    const updateFavorite = useUpdateFavorite()
 
     return (
         <div className='container mx-auto p-4'>
@@ -151,13 +89,11 @@ function BoardsListPage() {
                         {boardsQuery.boards.map((board) => (
                             <Card key={board.id} className='relative'>
                                 <div className='absolute top-2 right-2 flex items-center gap-2'>
+                                    {updateFavorite.isOptimisticFavorite(board) ? <StarIcon /> : <StarOffIcon />}
                                     <Switch
-                                        checked={board.isFavorite}
-                                        onCheckedChange={() => handleToggleFavorite(board)}
+                                        checked={updateFavorite.isOptimisticFavorite(board)}
+                                        onCheckedChange={() => updateFavorite.toggle(board)}
                                     />
-                                    <span className='text-sm text-gray-500'>
-                                        {board.isFavorite ? 'В избранном' : ''}
-                                    </span>
                                 </div>
                                 <CardHeader>
                                     <div className='flex flex-col gap-2'>
