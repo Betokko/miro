@@ -10,7 +10,7 @@ export function useDeleteBoard() {
     })
 
     return {
-        deleteBoard: (boardId: string) =>
+        delete: (boardId: string) =>
             deleteBoardMutation.mutate({
                 params: { path: { boardId } },
             }),

@@ -5,10 +5,11 @@ import { RouterProvider } from 'react-router-dom'
 import { enableMocking } from '@/shared/api/mocks'
 import { router } from './router'
 
-enableMocking().then(() => {
+;(async () => {
+    await enableMocking()
     createRoot(document.getElementById('root')!).render(
         <StrictMode>
             <RouterProvider router={router} />
         </StrictMode>,
     )
-})
+})()

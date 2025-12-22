@@ -18,6 +18,6 @@ export function useCreateBoard() {
 
     return {
         isPending: createBoardMutation.isPending,
-        createBoard: () => createBoardMutation.mutate({}),
+        create: () => createBoardMutation.mutate({}),
     }
 }
