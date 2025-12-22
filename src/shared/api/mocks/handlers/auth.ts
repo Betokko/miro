@@ -30,7 +30,7 @@ export const authHandlers = [
             )
         }
 
-        const { accessToken, refreshToken } = await generateTokens({ userId: user.id, email: user.email })
+        const { accessToken, refreshToken } = await generateTokens({ id: user.id, email: user.email })
         return HttpResponse.json(
             {
                 accessToken,
@@ -65,7 +65,7 @@ export const authHandlers = [
             email: body.email,
         }
 
-        const { accessToken, refreshToken } = await generateTokens({ userId: newUser.id, email: newUser.email })
+        const { accessToken, refreshToken } = await generateTokens({ id: newUser.id, email: newUser.email })
         mockUsers.push(newUser)
         userPasswords.set(body.email, body.password)
 
@@ -98,7 +98,7 @@ export const authHandlers = [
 
         try {
             const session = await verifyToken(refreshToken)
-            const user = mockUsers.find((u) => u.id === session.userId)
+            const user = mockUsers.find((u) => u.id === session.id)
 
             if (!user) {
                 throw new Error('User not found')
@@ -107,7 +107,7 @@ export const authHandlers = [
             await delay(1000)
 
             const { accessToken, refreshToken: newRefreshToken } = await generateTokens({
-                userId: user.id,
+                id: user.id,
                 email: user.email,
             })
 

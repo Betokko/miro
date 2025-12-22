@@ -1,17 +1,12 @@
 import { createBrowserRouter, redirect } from 'react-router-dom'
 import { ProtectedRoute, protectedLoader } from '@/app/protected-route.tsx'
-import { Providers } from '@/app/providers.tsx'
 import { AppHeader } from '@/features/header'
 import { ROUTES } from '../shared/model/routes.tsx'
 import { App } from './app.tsx'
 
 export const router = createBrowserRouter([
     {
-        element: (
-            <Providers>
-                <App />
-            </Providers>
-        ),
+        element: <App />,
         children: [
             {
                 loader: protectedLoader,

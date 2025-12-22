@@ -5,17 +5,11 @@ import { useSession } from '@/shared/model/session'
 
 export function ProtectedRoute() {
     const { session } = useSession()
-    if (!session) {
-        return <Navigate to={ROUTES.LOGIN} />
-    }
-    return <Outlet />
+    return session ? <Outlet /> : <Navigate to={ROUTES.LOGIN} />
 }
 
 export async function protectedLoader() {
     await enableMocking()
     const token = await useSession.getState().refreshToken()
-    if (!token) {
-        return redirect(ROUTES.LOGIN)
-    }
-    return null
+    return token ? null : redirect(ROUTES.LOGIN)
 }
