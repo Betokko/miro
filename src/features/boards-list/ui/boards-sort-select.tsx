@@ -10,7 +10,7 @@ interface BoardsSortSelectProps {
 export function BoardsSortSelect({ value, onValueChange }: BoardsSortSelectProps) {
     return (
         <Select value={value} onValueChange={onValueChange}>
-            <SelectTrigger id='sort' className='w-full'>
+            <SelectTrigger className='w-full'>
                 <SelectValue placeholder='Сортировка' />
             </SelectTrigger>
             <SelectContent>

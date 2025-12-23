@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import { BoardCard } from './compose/board-card'
-import { BoardItem } from './compose/board-item'
-import { useBoardsList } from './model/use-boards-list'
-
-import { useRecentGroups } from './model/use-recent-groups'
+import { BoardCard } from '@/features/boards-list/compose/board-card.tsx'
+import { BoardItem } from '@/features/boards-list/compose/board-item'
+import { useBoardsList } from '@/features/boards-list/model/use-boards-list'
+import { useRecentGroups } from '@/features/boards-list/model/use-recent-groups'
 import {
     BoardsLayoutContentGroups,
     BoardsListLayout,
@@ -11,9 +10,9 @@ import {
     BoardsListLayoutContent,
     BoardsListLayoutHeader,
     BoardsListLayoutList,
-} from './ui/boards-list-layout'
-import { BoardsSidebar } from './ui/boards-sidebar'
-import { type ViewMode, ViewModeToggle } from './ui/view-mode-toggle'
+} from '@/features/boards-list/ui/boards-list-layout'
+import { BoardsSidebar } from '@/features/boards-list/ui/boards-sidebar'
+import { type ViewMode, ViewModeToggle } from '@/features/boards-list/ui/view-mode-toggle'
 
 function BoardsListPage() {
     const boardsQuery = useBoardsList({
@@ -39,8 +38,8 @@ function BoardsListPage() {
                 isEmpty={boardsQuery.boards.length === 0}
                 isPending={boardsQuery.isPending}
                 isPendingNext={boardsQuery.isFetchingNextPage}
-                cursorRef={boardsQuery.cursorRef}
-                hasCursor={boardsQuery.hasNextPage}
+                ref={boardsQuery.ref}
+                hasRef={boardsQuery.hasNextPage}
                 mode={viewMode}
             >
                 <BoardsLayoutContentGroups

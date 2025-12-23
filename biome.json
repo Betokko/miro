@@ -50,7 +50,8 @@
             },
             "correctness": {
                 "useUniqueElementIds": "info",
-                "useExhaustiveDependencies": "info"
+                "useExhaustiveDependencies": "info",
+                "noUnusedFunctionParameters": "info"
             },
             "complexity": {
                 "useOptionalChain": "info"

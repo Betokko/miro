@@ -1,10 +1,14 @@
 import { useState } from 'react'
-import { BoardCard } from './compose/board-card'
-import { BoardItem } from './compose/board-item'
-import { useBoardsList } from './model/use-boards-list'
-import { BoardsListLayout, BoardsListLayoutContent, BoardsListLayoutHeader } from './ui/boards-list-layout'
-import { BoardsSidebar } from './ui/boards-sidebar'
-import { type ViewMode, ViewModeToggle } from './ui/view-mode-toggle'
+import { BoardCard } from '@/features/boards-list/compose/board-card'
+import { BoardItem } from '@/features/boards-list/compose/board-item.tsx'
+import { useBoardsList } from '@/features/boards-list/model/use-boards-list.ts'
+import {
+    BoardsListLayout,
+    BoardsListLayoutContent,
+    BoardsListLayoutHeader,
+} from '@/features/boards-list/ui/boards-list-layout'
+import { BoardsSidebar } from '@/features/boards-list/ui/boards-sidebar'
+import { type ViewMode, ViewModeToggle } from '@/features/boards-list/ui/view-mode-toggle.tsx'
 
 function BoardsListPage() {
     const boardsQuery = useBoardsList({
@@ -28,8 +32,8 @@ function BoardsListPage() {
                 isEmpty={boardsQuery.boards.length === 0}
                 isPending={boardsQuery.isPending}
                 isPendingNext={boardsQuery.isFetchingNextPage}
-                cursorRef={boardsQuery.cursorRef}
-                hasCursor={boardsQuery.hasNextPage}
+                ref={boardsQuery.ref}
+                hasRef={boardsQuery.hasNextPage}
                 mode={viewMode}
                 renderList={() => boardsQuery.boards.map((board, i) => <BoardItem board={board} key={i} />)}
                 renderGrid={() => boardsQuery.boards.map((board, i) => <BoardCard board={board} key={i} />)}

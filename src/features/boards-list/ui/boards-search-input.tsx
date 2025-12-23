@@ -8,7 +8,6 @@ interface BoardsSearchInputProps {
 export function BoardsSearchInput({ value, onChange }: BoardsSearchInputProps) {
     return (
         <Input
-            id='search'
             placeholder='Введите название доски...'
             value={value}
             onChange={(e) => onChange(e.target.value)}

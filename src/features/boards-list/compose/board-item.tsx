@@ -1,9 +1,9 @@
+import { useDeleteBoard } from '@/features/boards-list/model/use-delete-board.ts'
+import { useUpdateFavorite } from '@/features/boards-list/model/use-update-favorite.ts'
+import { BoardsFavoriteToggle } from '@/features/boards-list/ui/boards-favorite-toggle.tsx'
+import { BoardsListItem } from '@/features/boards-list/ui/boards-list-item.tsx'
 import type { ApiSchemas } from '@/shared/api/schema'
 import { DropdownMenuItem } from '@/shared/ui/kit/dropdown-menu'
-import { useDeleteBoard } from '../model/use-delete-board'
-import { useUpdateFavorite } from '../model/use-update-favorite'
-import { BoardsFavoriteToggle } from '../ui/boards-favorite-toggle'
-import { BoardsListItem } from '../ui/boards-list-item'
 
 export function BoardItem({ board }: { board: ApiSchemas['Board'] }) {
     const deleteBoard = useDeleteBoard()
@@ -23,7 +23,7 @@ export function BoardItem({ board }: { board: ApiSchemas['Board'] }) {
                 <DropdownMenuItem
                     variant='destructive'
                     disabled={deleteBoard.getIsPending(board.id)}
-                    onClick={() => deleteBoard.deleteBoard(board.id)}
+                    onClick={() => deleteBoard.delete(board.id)}
                 >
                     Удалить
                 </DropdownMenuItem>

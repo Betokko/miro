@@ -1,6 +1,6 @@
+import { type RefCallback, useCallback } from 'react'
 import { rqClient } from '@/shared/api/instance'
 import type { ApiSchemas } from '@/shared/api/schema'
-import { useCallback, RefCallback } from 'react'
 
 type UseBoardsListParams = {
     limit?: number
@@ -27,7 +27,7 @@ export function useBoardsList({ limit = 20, isFavorite, search, sort }: UseBoard
         {
             initialPageParam: 1,
             pageParamName: 'page',
-            getNextPageParam: (lastPage: ApiSchemas['BoardsList'], allPages: unknown, lastPageParam: number) =>
+            getNextPageParam: (lastPage: ApiSchemas['BoardsList'], _allPages: unknown, lastPageParam: number) =>
                 Number(lastPageParam) < lastPage.totalPages ? Number(lastPageParam) + 1 : null,
         },
     )
