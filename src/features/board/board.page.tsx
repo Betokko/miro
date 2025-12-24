@@ -1,10 +1,10 @@
 import { ArrowRightIcon, StickerIcon } from 'lucide-react'
-import { useParams } from 'react-router-dom'
-import type { PathParams, ROUTES } from '@/shared/model/routes'
+// import { useParams } from 'react-router-dom'
+// import type { PathParams, ROUTES } from '@/shared/model/routes'
 import { Button } from '@/shared/ui/kit/button.tsx'
 
 function BoardPage() {
-    const params = useParams<PathParams[typeof ROUTES.BOARD]>()
+    // const params = useParams<PathParams[typeof ROUTES.BOARD]>()
     return (
         <Layout>
             <Dots />
