@@ -2,4 +2,7 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-https://vercel.com/artur-nikitins-projects/sticker-board-app
+[![Открыть приложение](https://img.shields.io/badge/Open-App-blue?style=for-the-badge)][(https://example.com)](https://sticker-board-app.vercel.app/boards)
+
+
+
