@@ -79,8 +79,8 @@ function generateRandomBoards(count: number): ApiSchemas['Board'][] {
 
     for (let i = 0; i < count; i++) {
         const createdAt = randomDate()
-        const updatedAt = new Date(new Date(createdAt).getTime() + Math.random() * 86400000 * 10).toISOString() // Добавляем до 10 дней
-        const lastOpenedAt = new Date(new Date(updatedAt).getTime() + Math.random() * 86400000 * 5).toISOString() // Добавляем до 5 дней
+        const updatedAt = new Date(new Date(createdAt).getTime() - Math.random() * 86400000 * 5).toISOString() // Отнимаем до 5 дней
+        const lastOpenedAt = new Date(new Date(updatedAt).getTime() - Math.random() * 86400000 * 10).toISOString() // Отнимаем до 10 дней
 
         result.push({
             id: crypto.randomUUID(),
@@ -185,7 +185,7 @@ export const boardsHandlers = [
         await verifyTokenOrThrow(request)
         const { boardId } = params
         const board = boards.find((board) => board.id === boardId)
-        await delay(1000)
+        await delay(500)
 
         if (!board) {
             return HttpResponse.json({ message: 'Board not found', code: 'NOT_FOUND' }, { status: 404 })

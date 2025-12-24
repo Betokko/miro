@@ -1,6 +1,4 @@
-import { PlusIcon } from 'lucide-react'
 import { cn } from '@/shared/lib/css'
-import { Button } from '@/shared/ui/kit/button'
 
 interface Template {
     id: string
@@ -29,10 +27,6 @@ export function TemplateCard({ template, onSelect, className }: TemplateCardProp
             </div>
             <h3 className='font-medium mb-1'>{template.name}</h3>
             <p className='text-sm text-gray-500'>{template.description}</p>
-            <Button size='sm' className='absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity'>
-                <PlusIcon className='h-4 w-4 mr-2' />
-                Использовать
-            </Button>
         </div>
     )
 }
