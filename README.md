@@ -1,5 +1,5 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🚀 Демо приложения
 
-[![Открыть приложение](https://img.shields.io/badge/Open-App-blue?style=for-the-badge)](https://sticker-board-app.vercel.app)
+[![Открыть Sticker Board](https://img.shields.io/badge/Открыть%20Sticker%20Board-000000?style=for-the-badge&logo=vercel&logoColor=white)](https://sticker-board-app.vercel.app/)
