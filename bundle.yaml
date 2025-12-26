@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: Miro Collaborative Whiteboard API
-  description: API for a collaborative whiteboard application similar to Miro
+  title: Sticker board API
+  description: API for sticker board
   version: 1.0.0
 paths:
   /auth/login:

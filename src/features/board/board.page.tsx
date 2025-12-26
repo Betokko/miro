@@ -1,19 +1,45 @@
+import { clsx } from 'clsx'
 import { ArrowRightIcon, StickerIcon } from 'lucide-react'
-// import { useParams } from 'react-router-dom'
-// import type { PathParams, ROUTES } from '@/shared/model/routes'
 import { Button } from '@/shared/ui/kit/button.tsx'
+import { useCanvasRect } from './hooks/use-canvas-rect.ts'
+import { useLayoutFocus } from './hooks/use-layout-focus.ts'
+import { useNodes } from './model/use-nodes.ts'
+import { useViewState } from './model/use-view-state.ts'
+import { useViewModel } from './view-model/use-view-model.ts'
 
 function BoardPage() {
-    // const params = useParams<PathParams[typeof ROUTES.BOARD]>()
+    const nodesModel = useNodes()
+    const viewStateModel = useViewState()
+    const { canvasRef, canvasRect } = useCanvasRect()
+    const { layoutRef } = useLayoutFocus()
+
+    const viewModal = useViewModel({ nodesModel, viewStateModel, canvasRect })
+
     return (
-        <Layout>
+        <Layout tab-index={0} ref={layoutRef} onKeyDown={viewModal.layout?.onKeyDown}>
             <Dots />
-            <Canvas>
-                <Sticker text={'Hello'} x={100} y={100} />
-                <Sticker text={'Hello'} x={200} y={200} />
+            <Canvas ref={canvasRef} onClick={viewModal.canvas?.onClick}>
+                <Overlay
+                    onClick={viewModal.overlay?.onClick}
+                    onMouseDown={viewModal.overlay?.onMouseDown}
+                    onMouseUp={viewModal.overlay?.onMouseUp}
+                />
+                {viewModal?.nodes?.map((node) => (
+                    <Sticker
+                        key={node.id}
+                        text={node.text}
+                        x={node.x}
+                        y={node.y}
+                        selected={node.isSelected}
+                        onClick={node.onClick}
+                    />
+                ))}
             </Canvas>
             <Actions>
-                <ActionButton isActive={false} onClick={() => {}}>
+                <ActionButton
+                    isActive={viewModal.actions?.addSticker?.isActive}
+                    onClick={viewModal.actions?.addSticker?.onClick}
+                >
                     <StickerIcon />
                 </ActionButton>
                 <ActionButton isActive={false} onClick={() => {}}>
@@ -26,9 +52,28 @@ function BoardPage() {
 
 export const Component = BoardPage
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Overlay({
+    onClick,
+    onMouseDown,
+    onMouseUp,
+}: {
+    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
+    onMouseDown?: (e: React.MouseEvent<HTMLDivElement>) => void
+    onMouseUp?: (e: React.MouseEvent<HTMLDivElement>) => void
+}) {
+    return <div className='absolute inset-0' onClick={onClick} onMouseDown={onMouseDown} onMouseUp={onMouseUp} />
+}
+
+function Layout({
+    children,
+    ref,
+    ...props
+}: {
+    children: React.ReactNode
+    ref: React.Ref<HTMLDivElement>
+} & React.HTMLAttributes<HTMLDivElement>) {
     return (
-        <div className='grow relative' tabIndex={0}>
+        <div className='grow relative' tabIndex={0} ref={ref} {...props}>
             {children}
         </div>
     )
@@ -36,26 +81,49 @@ function Layout({ children }: { children: React.ReactNode }) {
 
 function Dots() {
     return (
-        <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]'></div>
+        <div className='absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px]' />
     )
 }
 
-function Canvas({ children, ...props }: { children: React.ReactNode } & React.HTMLAttributes<HTMLDivElement>) {
+function Canvas({
+    children,
+    ref,
+    ...props
+}: {
+    children: React.ReactNode
+    ref: React.Ref<HTMLDivElement>
+} & React.HTMLAttributes<HTMLDivElement>) {
     return (
-        <div {...props} className='absolute inset-0'>
+        <div className='absolute inset-0' ref={ref} {...props}>
             {children}
         </div>
     )
 }
 
-function Sticker({ text, x, y }: { text: string; x: number; y: number }) {
+function Sticker({
+    text,
+    x,
+    y,
+    onClick,
+    selected,
+}: {
+    text: string
+    x: number
+    y: number
+    onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+    selected?: boolean
+}) {
     return (
-        <div
-            className='absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md'
+        <button
+            onClick={onClick}
+            className={clsx(
+                'absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md',
+                selected && 'outline outline-blue-500',
+            )}
             style={{ transform: `translate(${x}px, ${y}px)` }}
         >
             {text}
-        </div>
+        </button>
     )
 }
 
@@ -73,8 +141,8 @@ function ActionButton({
     onClick,
 }: {
     children: React.ReactNode
-    isActive: boolean
-    onClick: () => void
+    isActive?: boolean
+    onClick?: React.MouseEventHandler<HTMLButtonElement>
 }) {
     return (
         <Button

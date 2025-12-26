@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/miro.iml" filepath="$PROJECT_DIR$/.idea/miro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/sticker-board.iml" filepath="$PROJECT_DIR$/.idea/sticker-board.iml" />
     </modules>
   </component>
 </project>

@@ -21,14 +21,14 @@ export function BoardsListCard({ board, bottomActions, rightTopActions }: Boards
     const [isTruncated, setIsTruncated] = useState(false)
 
     useLayoutEffect(() => {
-        const el = ref.current
-        if (!el) return
+        const element = ref.current
+        if (!element) return
 
-        const check = () => setIsTruncated(el.scrollWidth > el.clientWidth)
+        const check = () => setIsTruncated(element.scrollWidth > element.clientWidth)
         check()
 
         const observer = new ResizeObserver(check)
-        observer.observe(el)
+        observer.observe(element)
 
         return () => observer.disconnect()
     }, [])

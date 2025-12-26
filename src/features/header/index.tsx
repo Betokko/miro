@@ -11,7 +11,7 @@ export function AppHeader() {
         <header className='bg-background border-b border-border/40 shadow-sm py-3 px-4'>
             <div className='max-w-7xl mx-auto flex items-center justify-between'>
                 <Button asChild variant='link' className='hover:no-underline text-xl font-semibold'>
-                    <Link to={href(ROUTES.HOME)}>Miro Copy</Link>
+                    <Link to={href(ROUTES.HOME)}>Sticker Board</Link>
                 </Button>
                 <div className='flex items-center gap-4'>
                     <span className='text-sm text-muted-foreground'>{session.email}</span>
