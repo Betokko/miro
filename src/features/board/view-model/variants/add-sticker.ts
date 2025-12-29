@@ -1,11 +1,17 @@
-import type { ViewModel, ViewModelParams } from '../use-view-model.ts'
+import { goToIdle } from '@/features/board/view-model/variants/idle.ts'
+import type { ViewModelParams } from '../view-model-params'
+import type { ViewModel } from '../view-model-type.ts'
 
-export function useAddStickerViwModel({ viewStateModel, nodesModel, canvasRect }: ViewModelParams) {
+export type AddStickerViewState = {
+    type: 'addSticker'
+}
+
+export function useAddStickerViwModel({ setViewState, nodesModel, canvasRect }: ViewModelParams) {
     return (): ViewModel => ({
         nodes: nodesModel.nodes,
         layout: {
             onKeyDown: (e) => {
-                if (e.key === 'Escape') viewStateModel.goToIdle()
+                if (e.key === 'Escape') setViewState(goToIdle())
             },
         },
         canvas: {
@@ -16,14 +22,20 @@ export function useAddStickerViwModel({ viewStateModel, nodesModel, canvasRect }
                     x: e.clientX - canvasRect.x,
                     y: e.clientY - canvasRect.y,
                 })
-                viewStateModel.goToIdle()
+                setViewState(goToIdle())
             },
         },
         actions: {
             addSticker: {
                 isActive: true,
-                onClick: () => viewStateModel.goToIdle(),
+                onClick: () => setViewState(goToIdle()),
             },
         },
     })
+}
+
+export function goToAddSticker(): AddStickerViewState {
+    return {
+        type: 'addSticker',
+    }
 }

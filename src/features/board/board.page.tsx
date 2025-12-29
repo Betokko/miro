@@ -1,30 +1,26 @@
 import { clsx } from 'clsx'
 import { ArrowRightIcon, StickerIcon } from 'lucide-react'
+import { useWindowEvents } from '@/features/board/hooks/use-window-events.ts'
 import { Button } from '@/shared/ui/kit/button.tsx'
+import type { Rect } from './domain/rect.ts'
 import { useCanvasRect } from './hooks/use-canvas-rect.ts'
 import { useLayoutFocus } from './hooks/use-layout-focus.ts'
 import { useNodes } from './model/use-nodes.ts'
-import { useViewState } from './model/use-view-state.ts'
 import { useViewModel } from './view-model/use-view-model.ts'
 
 function BoardPage() {
     const nodesModel = useNodes()
-    const viewStateModel = useViewState()
-    const { canvasRef, canvasRect } = useCanvasRect()
+    const { canvasRect, canvasRef } = useCanvasRect()
     const { layoutRef } = useLayoutFocus()
-
-    const viewModal = useViewModel({ nodesModel, viewStateModel, canvasRect })
+    const viewModel = useViewModel({ nodesModel, canvasRect })
+    useWindowEvents(viewModel)
 
     return (
-        <Layout tab-index={0} ref={layoutRef} onKeyDown={viewModal.layout?.onKeyDown}>
+        <Layout tab-index={0} ref={layoutRef} onKeyDown={viewModel.layout?.onKeyDown}>
             <Dots />
-            <Canvas ref={canvasRef} onClick={viewModal.canvas?.onClick}>
-                <Overlay
-                    onClick={viewModal.overlay?.onClick}
-                    onMouseDown={viewModal.overlay?.onMouseDown}
-                    onMouseUp={viewModal.overlay?.onMouseUp}
-                />
-                {viewModal?.nodes?.map((node) => (
+            <Canvas ref={canvasRef} onClick={viewModel.canvas?.onClick}>
+                <Overlay onClick={viewModel.overlay?.onClick} onMouseDown={viewModel.overlay?.onMouseDown} />
+                {viewModel?.nodes?.map((node) => (
                     <Sticker
                         key={node.id}
                         text={node.text}
@@ -35,10 +31,11 @@ function BoardPage() {
                     />
                 ))}
             </Canvas>
+            {viewModel.selectionWindow && <SelectionWindow {...viewModel.selectionWindow} />}
             <Actions>
                 <ActionButton
-                    isActive={viewModal.actions?.addSticker?.isActive}
-                    onClick={viewModal.actions?.addSticker?.onClick}
+                    isActive={viewModel.actions?.addSticker?.isActive}
+                    onClick={viewModel.actions?.addSticker?.onClick}
                 >
                     <StickerIcon />
                 </ActionButton>
@@ -51,6 +48,15 @@ function BoardPage() {
 }
 
 export const Component = BoardPage
+
+function SelectionWindow({ width, height, y, x }: Rect) {
+    return (
+        <div
+            className='absolute inset-0 border-2 bg-indigo-600/25 border-indigo-600 z-200'
+            style={{ transform: `translate(${x}px, ${y}px)`, width, height }}
+        />
+    )
+}
 
 function Overlay({
     onClick,
@@ -117,8 +123,8 @@ function Sticker({
         <button
             onClick={onClick}
             className={clsx(
-                'absolute bg-yellow-300 px-2 py-4 rounded-xs shadow-md',
-                selected && 'outline outline-blue-500',
+                `absolute bg-yellow-200 p-2 shadow-md box-border`,
+                selected && 'outline-2 outline-blue-500 outline-offset-4 z-100',
             )}
             style={{ transform: `translate(${x}px, ${y}px)` }}
         >
