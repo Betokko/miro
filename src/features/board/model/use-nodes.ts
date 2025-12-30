@@ -14,15 +14,23 @@ type StickerNode = NodeBase<'sticker'> & {
 export type Node = StickerNode
 
 export function useNodes() {
-    const [nodes, setState] = useState<Node[]>([])
+    const [nodes, setNodes] = useState<Node[]>([
+        { id: '1', y: 100, x: 100, text: 'HELLO_1', type: 'sticker' },
+        { id: '2', y: 200, x: 200, text: 'HELLO_2', type: 'sticker' },
+    ])
 
     const addSticker = (data: Pick<StickerNode, 'text' | 'x' | 'y'>) => {
-        const node: StickerNode = { id: crypto.randomUUID(), type: 'sticker', ...data }
-        setState((prev) => [...prev, node])
+        setNodes((prev) => [...prev, { id: crypto.randomUUID(), type: 'sticker', ...data }])
     }
+
+    const deleteNodes = (ids: string[]) => {
+        setNodes((prev) => prev.filter((node) => !ids.includes(node.id)))
+    }
+
     return {
         nodes,
         addSticker,
+        deleteNodes,
     }
 }
 

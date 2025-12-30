@@ -22,6 +22,13 @@ export function useIdleViewModel({ setViewState, nodesModel, canvasRect }: ViewM
             selectedIds: selectItems(prevState.selectedIds, ids, modif),
         })
 
+    const deleteSelected = (state: IdleViewState) => {
+        if (state.selectedIds.size > 0) {
+            nodesModel.deleteNodes([...state.selectedIds])
+            setViewState({ ...state, selectedIds: new Set() })
+        }
+    }
+
     return (idleState: IdleViewState): ViewModel => ({
         nodes: nodesModel.nodes.map((node) => ({
             ...node,
@@ -33,6 +40,7 @@ export function useIdleViewModel({ setViewState, nodesModel, canvasRect }: ViewM
         layout: {
             onKeyDown: (e) => {
                 if (e.key === 's') setViewState(goToAddSticker())
+                if (e.key === 'Delete' || e.key === 'Backspace') deleteSelected(idleState)
             },
         },
         overlay: {
@@ -59,7 +67,6 @@ export function useIdleViewModel({ setViewState, nodesModel, canvasRect }: ViewM
                 }
             },
             onMouseUp: () => {
-                console.log('idle', 'onMouseUp')
                 if (idleState.mouseDown) {
                     setViewState({
                         ...idleState,

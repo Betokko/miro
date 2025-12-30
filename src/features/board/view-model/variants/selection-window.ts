@@ -1,5 +1,5 @@
 import type { Point } from '../../domain/point.ts'
-import { createRectFromPoints, isPointInRect } from '../../domain/rect.ts'
+import { createRectFromPoints, isRectInIntersecting, type Rect } from '../../domain/rect.ts'
 import { pointOnScreenToCanvas } from '../../domain/screen-to-canvas.ts'
 import { type Selection, selectItems } from '../../domain/selection.ts'
 import { goToIdle } from '../variants/idle.ts'
@@ -13,15 +13,28 @@ export type SelectionWindowViewState = {
     initialSelectedIds: Selection
 }
 
-export function useSelectionWindowViwModel({ setViewState, nodesModel, canvasRect }: ViewModelParams) {
+export function useSelectionWindowViwModel({ setViewState, nodesModel, canvasRect, nodesRects }: ViewModelParams) {
+    const getNodes = (state: SelectionWindowViewState, selectionWindowRect: Rect) =>
+        nodesModel.nodes.map((node) => {
+            const nodeRect: Rect = {
+                x: node.x,
+                y: node.y,
+                width: nodesRects[node.id].width,
+                height: nodesRects[node.id].height,
+            }
+            return {
+                ...node,
+                isSelected:
+                    isRectInIntersecting(nodeRect, selectionWindowRect) || state.initialSelectedIds.has(node.id),
+            }
+        })
+
     return (state: SelectionWindowViewState): ViewModel => {
         const rect = createRectFromPoints(state.startPoint, state.endPoint)
+        const nodes = getNodes(state, rect)
         return {
             selectionWindow: rect,
-            nodes: nodesModel.nodes.map((node) => ({
-                ...node,
-                isSelected: isPointInRect(node, rect) || state.initialSelectedIds.has(node.id),
-            })),
+            nodes,
             window: {
                 onMouseMove: (e) => {
                     setViewState({
@@ -30,10 +43,10 @@ export function useSelectionWindowViwModel({ setViewState, nodesModel, canvasRec
                     })
                 },
                 onMouseUp: () => {
-                    const nodes = nodesModel.nodes.filter((node) => isPointInRect(node, rect)).map((node) => node.id)
+                    const selectedNodes = nodes.filter((node) => node.isSelected).map((node) => node.id)
                     setViewState(
                         goToIdle({
-                            selectedIds: selectItems(state.initialSelectedIds, nodes, 'add'),
+                            selectedIds: selectItems(state.initialSelectedIds, selectedNodes, 'add'),
                         }),
                     )
                 },
