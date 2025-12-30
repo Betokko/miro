@@ -1,7 +1,7 @@
 import { ArrowRightIcon, StickerIcon } from 'lucide-react'
-import { useNodesRects } from '@/features/board/hooks/use-nodes-rects.ts'
 import { useCanvasRect } from './hooks/use-canvas-rect.ts'
 import { useLayoutFocus } from './hooks/use-layout-focus.ts'
+import { useNodesRects } from './hooks/use-nodes-rects.ts'
 import { useWindowEvents } from './hooks/use-window-events.ts'
 import { useNodes } from './model/use-nodes.ts'
 import { ActionButton } from './ui/ActionButton.tsx'
@@ -28,16 +28,7 @@ function BoardPage() {
             <Canvas ref={canvasRef} onClick={viewModel.canvas?.onClick}>
                 <Overlay onClick={viewModel.overlay?.onClick} onMouseDown={viewModel.overlay?.onMouseDown} />
                 {viewModel?.nodes?.map((node) => (
-                    <Sticker
-                        ref={nodeRef}
-                        id={node.id}
-                        key={node.id}
-                        text={node.text}
-                        x={node.x}
-                        y={node.y}
-                        selected={node.isSelected}
-                        onClick={node.onClick}
-                    />
+                    <Sticker {...node} ref={nodeRef} key={node.id} />
                 ))}
             </Canvas>
             {viewModel.selectionWindow && <SelectionWindow {...viewModel.selectionWindow} />}

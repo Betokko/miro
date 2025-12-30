@@ -1,9 +1,9 @@
-import { goToIdle } from '@/features/board/view-model/variants/idle.ts'
 import type { ViewModelParams } from '../view-model-params'
 import type { ViewModel } from '../view-model-type.ts'
+import { goToIdle } from './idle'
 
 export type AddStickerViewState = {
-    type: 'addSticker'
+    type: 'add-sticker'
 }
 
 export function useAddStickerViwModel({ setViewState, nodesModel, canvasRect }: ViewModelParams) {
@@ -36,6 +36,6 @@ export function useAddStickerViwModel({ setViewState, nodesModel, canvasRect }: 
 
 export function goToAddSticker(): AddStickerViewState {
     return {
-        type: 'addSticker',
+        type: 'add-sticker',
     }
 }

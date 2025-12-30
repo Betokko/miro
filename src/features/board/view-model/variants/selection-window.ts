@@ -2,12 +2,12 @@ import type { Point } from '../../domain/point.ts'
 import { createRectFromPoints, isRectInIntersecting, type Rect } from '../../domain/rect.ts'
 import { pointOnScreenToCanvas } from '../../domain/screen-to-canvas.ts'
 import { type Selection, selectItems } from '../../domain/selection.ts'
-import { goToIdle } from '../variants/idle.ts'
 import type { ViewModelParams } from '../view-model-params'
 import type { ViewModel } from '../view-model-type.ts'
+import { goToIdle } from './idle'
 
 export type SelectionWindowViewState = {
-    type: 'selectionWindow'
+    type: 'selection-window'
     startPoint: Point
     endPoint: Point
     initialSelectedIds: Selection
@@ -61,7 +61,7 @@ export function goToSelectionWindow(
     initialSelectedIds?: Set<string>,
 ): SelectionWindowViewState {
     return {
-        type: 'selectionWindow',
+        type: 'selection-window',
         startPoint,
         endPoint,
         initialSelectedIds: initialSelectedIds ?? new Set(),
